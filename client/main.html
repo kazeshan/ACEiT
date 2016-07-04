@@ -48,22 +48,14 @@
     
   <div class= "row" id="fourth">
 
-    <div class ="col-md-6">
+    <div class ="col-md-12">
 
-    <a id ="studentlink"> Student Login</a>
-
- 
- </div> 
-
- <div class ="col-md-6">
-
-      <a id ="teacherlink"> Teacher Login
-    </a>
-
-
+    <button class = ".btn-custom" id = "Login"> ACEiT Login </button> 
 
  
  </div> 
+
+ 
 </div>  
 
  
@@ -82,18 +74,227 @@
 
 </template>
 
-<template name="student">
+<template name ="navigation">
 
-  Yo I am {{username}} with ID {{userid}}
+<div class="container-fluid" id="first" >
+      <nav class="navbar navbar-default" role="navigation" style="background-color:white">
+        <!-- Brand and toggle get grouped for better mobile display -->
 
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse" >
+          <ul class="nav navbar-nav" >
+            <li ><a style="color:white" id="homebtn" >ACEiT</a></li>
+            <li><a href="#" style="color:white">Notifications</a></li>
+          <li><a href="#" style="color:white" > {{currentTime}}</a></li>
+          
+          <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" style="color:white">Profile</a>
+                <ul role="menu" class="dropdown-menu" style="color:black;text-align:center">
+                    <li>User : {{getUser}}</li>
+                    <li>ID : {{getID}}</li>
+                    <li>Modules : {{#if isModule}}  {{#each getModules}} {{code}} {{/each}} {{else}} Null {{/if}} </li>
+                    <li class="divider"></li>
+                    <li><a id = "createModule"> Edit / Create Module </a></li>
+                </ul>
+            </li>
+
+
+          <li><a style="color:white" id = "out" >SignOut</a></li>
+     
+            
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+   </div>
+
+  </template>
+<template name ="dashboard">
 
  
-</template>
+  {{>navigation}}
 
-<template name="teacher">
+ <div class = "row">
+ <div class = "col-md-5" id="dashone">
 
-  Yo I am a {{usertype}}
+  Welcome {{username}}, 
+  {{dashboard}}
+
+ </div>
+
+ <div class = "col-md-5" id ="dashtwo">
+  
+  {{#if isteacher}}
+  {{>create}}
+  {{/if}}
+ </div>
+
+</div>
  
+ <div class = "row" id ="dashrow">
+
+  {{#each list}}
+
+   {{>actbox}}
+
+  {{/each}}
+
+
+
+  </div>
+
+
 </template>
 
+
+<template name = "actbox">
+
+    <div class ="col-md-3 dashact">
+      <p> {{name}} </p>
+      <p> {{module}} </p>
+      <p> {{activity}} </p>
+      <p> {{status}} </p>
+      <p> {{extra}} </p>
+       
+    </div>
+
+ </template> 
+
+ <template name = "create">
+
+ <button id = "createbtn" > Create Activity </button>
+ </template>
+
+
+<template name = "actcreate">
+
+  {{setCounter}}
+  {{>navigation}}
+
+<form id ="activityform">
+  <fieldset class="form-group">
+    <label for="Module Name">Module Name</label>
+    <input type="text" class="form-control" name="modulename" placeholder="Eg Machine Lerning, Design Lab...">
+    
+  </fieldset>
+   <fieldset class="form-group">
+    <label for="Module Code">Module Code</label>
+    <input type="text" class="form-control" name="modulecode" placeholder="Eg CS45, CS12...">
+    
+  </fieldset>
+   <fieldset class="form-group">
+    <label for="Activity Name">Activity Name / Code </label>
+    <input type="text" class="form-control" name="activityname" placeholder="Eg A1, A2...">
+  
+  </fieldset>
+
+
+   <fieldset class="form-group">
+    
+
+    <a id="addquestion">Add Question</a> 
+    
+  </fieldset>
+   
+
+
+  {{#each count}}
+
+  {{>addquestion}}
+
+  {{/each}}
+  
+
+
+   
+
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+</template>
+
+<template name = "addquestion">
+  <a id="remove">Remove Question</a> 
+ <fieldset class="form-group">
+    <label for="Append">Question</label>
+    <input type = "text" class="form-control" name= "{{uniqid}}" >
+  </fieldset>
+</template>
+
+
+
+<template name = "addmodule">
+
+  {{>navigation}} 
+
+ <div class = "row" id ="modulelist">
+  <div class = "col-md-12">
+
+    <p> Here is the list of your modules : </p>
+ {{#each getModuleList}}
+  {{>module}}
+  {{/each}}
+
+</div>
+</div>
+
+  <form id ="moduleform">
+  <fieldset class="form-group">
+    <label for="Module Name">Module Name</label>
+    <input type="text" class="form-control" name="modulename" placeholder="Eg Machine Lerning, Design Lab...">
+    
+  </fieldset>
+   <fieldset class="form-group">
+    <label for="Module Code">Module Code</label>
+    <input type="text" class="form-control" name="modulecode" placeholder="Eg CS45, CS12...">
+   </fieldset>
+  
+  <fieldset class="form-group">
+    <label for="Append">List of Students</label>
+    <textarea class="form-control" name="studentlist" rows="3"></textarea>
+  </fieldset>
+
+
+  <button type="submit" class="btn btn-primary">Create Module</button>
+</form>
+
+
+</template>  
+
+
+<template name = "module">
+
+ <div class = "row" id = "mod">
+  <div clas = "col-md-12">
+ <a class ="modlist"> <p> {{module}} : {{code}} - View Student List </p> </a>
+</div>
+</div>
+</template>
+
+
+<template name = "studentlist">
+
+  <div class = "row">
+    <div class ="col-md-12">
+
+      <h3> Here are the list of students </h3>
+
+    </div>
+  </div>
+
+    <div class = "row">
+    <div class ="col-md-12">
+
+<ol>
+{{#each getStudentList}}
+
+<li> {{this}} </li >
+
+{{/each}}
+</ol>
+
+</div>
+  </div>
+</template>
 
