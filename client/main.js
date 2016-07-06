@@ -13,6 +13,7 @@ Session.setDefaultPersistent('userID','');
 Session.setDefaultPersistent('userName','');
 Session.setDefaultPersistent('userType','');
 Session.setDefaultPersistent('profileMade','No');
+Session.setDefault('qvselect','');
 
 
 //default session end
@@ -48,6 +49,12 @@ Router.route('/studentlist',{
 
   template : "studentlist",
   name:'studentlist'
+});
+
+Router.route('/session',{
+
+  template : "session",
+  name:'session'
 });
 
 
@@ -230,6 +237,12 @@ Template.actcreate.helpers({
 
 });
 
+Template.questionlist.helpers({
+
+   
+
+
+});
 
 
 
@@ -262,19 +275,22 @@ Template.actcreate.events({
      append.push(val);
    }
 
-   
-   
-   
-
    activityList.insert({
+        aID : code + activity,
         activity:activity,
         name : module,
-        questions : append,
         module : code,
-        status : "active",
+        status : "inactive",
         time : new Date(),
-        userID : Session.get('userID'),
+        userID : Session.get('userID')
     });
+
+   questions.insert({
+        aID : code + activity,
+        quest : append,
+        time : new Date()
+
+  });
    
    Session.setPersistent('counter','');
    alert("Activity has been created!");
@@ -382,6 +398,102 @@ Template.studentlist.helpers({
 
 });
 
+Template.actbox.events({
+
+  'click #viewact': function(e){
+
+  Session.setPersistent('aID',this.aID);
+  Router.go('/session');
+}
+});
+
+Template.session.helpers({
+ 
+   qlist : function (){
+     
+      var a =  questions.findOne({'aID':Session.get('aID')}).quest;    
+      Session.setPersistent('qnumber',a.length);
+      return a; 
+             
+   },
+
+   aid : function (){
+
+    return Session.get('aID');
+   },
+
+   getactqnum : function(){
+
+   return Session.get('qnumber');
+
+   },
+
+   getactmod : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).name;
+   },
+
+   getmodcode : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).module;
+   },
+
+   getactcode : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).activity;
+   },
+  
+   getactnum : function (){
+
+    var x = activityList.findOne({'aID':Session.get('aID')}).module;
+    return teacherModules.findOne({'code':x}).studentID.split('\n').length;
+   },
+
+   qviewmain : function(){
+
+    if(Session.get('qvselect') == ''){
+
+    return 'None Selected';
+    
+     }
+
+   else{
+
+    return questions.findOne({'aID':Session.get('aID')}).quest[Session.get('qvselect')];
+  
+   }
+
+   }
+
+});
+
+
+Template.session.events({
+
+  'click .qbtn' : function(event){
+
+   event.preventDefault();
+   const target = event.target;
+   var qid = target.id;
+   qid = qid.slice(1);
+   Session.set('qvselect',qid);
+  },
+
+  'submit #addqform' : function(e){
+
+   e.preventDefault();
+   const target = event.target;
+   var q = target.addition.value;
+   var old = questions.findOne({'aID':Session.get('aID')}).quest; 
+   var id = questions.findOne({'aID':Session.get('aID')})._id; 
+   console.log(old);
+   old.push(q);
+
+   questions.update({_id:id }, { $set: {quest: old }});
+  },
+
+
+});
 
 //loginIVLE
 

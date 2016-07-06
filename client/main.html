@@ -156,7 +156,7 @@
       <p> {{activity}} </p>
       <p> {{status}} </p>
       <p> {{extra}} </p>
-       
+      <a id = "viewact"> View Activity </a>       
     </div>
 
  </template> 
@@ -278,7 +278,7 @@
   <div class = "row">
     <div class ="col-md-12">
 
-      <h3> Here are the list of students </h3>
+      <h3> Here is the list of students </h3>
 
     </div>
   </div>
@@ -286,15 +286,130 @@
     <div class = "row">
     <div class ="col-md-12">
 
-<ol>
+
+  <div class = "list-group">
 {{#each getStudentList}}
 
-<li> {{this}} </li >
+<p class = "list-group-item"> {{this}} </p >
 
 {{/each}}
-</ol>
 
+</div>
 </div>
   </div>
 </template>
 
+<template name = "session">
+
+    {{>navigation}}
+
+
+
+
+
+  
+  <div class = "row" id = "sessionfirst">
+    <div class = "col-md-3">
+  {{aid}} Activity Session Page 
+  </div>
+  </div>
+  <div class = "row">
+
+    <div id = "sessionquest" class = "col-md-3">
+
+      <div class = "row" >
+      <h4> Questions </h4>
+      </div>
+
+      <div class = "row">
+
+      <div class = "list-group" id ="questlist">
+           {{#each qlist}}
+          
+           <div class ="list-group-item questitem" >
+            <p id = "qdisplaynum"> {{@index}} </p>
+            <p id ="qdisplay"> {{this}}  </p> 
+            <p>
+
+             <button id = "v{{@index}}" class = "qbtn"> View Question </button>  
+            <button id = "d{{@index}}" class = "qbtn2"> Deploy </button>  
+            
+            </p>
+            </div>
+
+           {{/each}}
+          
+           
+
+      </div>
+      </div>
+    </div>
+
+    <div class = "col-md-7" id = "sessionsec">
+
+     <div class = "row" id="sessionadmin">
+
+      <div class = "col-md-6" id= "sessionthird">
+      <h4> Question View </h4>
+     
+     <div id ="qviewmain">
+
+      <p> {{qviewmain}}
+       </p> 
+     </div>
+    
+
+     </div>
+     
+      <div class = "col-md-6" id = "sessionfourth">
+      <h4> Activity Admin </h4>
+        <div class = "list-group" id = "actadmin">
+
+        <p class = "list-group-item admin"> Module Name  : {{getactmod}} </p>
+        <p class = "list-group-item admin">  Activity Name : {{getmodcode}} - {{getactcode}} </p>
+
+        <p class = "list-group-item admin"> Enrolled Students - {{getactnum}} </p>
+        <p class = "list-group-item admin"> Active Students -  </p>
+
+        <p class = "list-group-item admin"> Start Time - </p>
+        <p class = "list-group-item admin"> No. of Questions - {{getactqnum}} </p>
+        <p class = "list-group-item admin"> Questions Deployed - </p>
+      </div>
+
+      
+     </div>
+   </div>
+
+     <div class = "row" id ="sessionresponse">
+      <div class = "col-md-4" id="addquest">
+        <h4> Add Question </h4>
+      
+      <form id = "addqform">
+       <fieldset class="form-group">
+    
+       <textarea rows ="8" cols = "60em" id ="addqtextarea" name="addition" > Add question here... 
+       </textarea>
+  
+       </fieldset>
+       
+       <button type="submit"  id="addquestbtn">Add</button>
+      </form>
+
+      </div>
+     <div class = "col-md-4" id="control">
+      <h4> Activity Control </h4>
+     </div>
+     <div class = "col-md-4" id="response">
+      <h4> Responses </h4>
+     </div>
+     </div>
+   </div>
+  </div>
+
+
+
+</template>
+
+<template name = "questionlist" >
+  
+  </template>
