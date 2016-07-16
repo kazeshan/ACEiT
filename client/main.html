@@ -85,7 +85,17 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse" >
           <ul class="nav navbar-nav" >
             <li ><a style="color:white" id="homebtn" >ACEiT</a></li>
-            <li><a href="#" style="color:white">Notifications</a></li>
+            <li class ="dropdown">
+              <a style="color:white" id = "noti" data-toggle="dropdown" class="dropdown-toggle">Notifications <sup style = "color:red"> {{unseen}} </sup></a>
+              
+              <ul role="menu" class="dropdown-menu" style="color:black" id = "ulnoti">
+              {{#each getNoti}}
+              <li> {{message}} </li>
+              {{/each}}
+
+              </ul>
+
+            </li>
           <li><a href="#" style="color:white" > {{currentTime}}</a></li>
           
           <li class="dropdown">
@@ -93,9 +103,20 @@
                 <ul role="menu" class="dropdown-menu" style="color:black;text-align:center">
                     <li>User : {{getUser}}</li>
                     <li>ID : {{getID}}</li>
-                    <li>Modules : {{#if isModule}}  {{#each getModules}} {{code}} {{/each}} {{else}} Null {{/if}} </li>
-                    <li class="divider"></li>
-                    <li><a id = "createModule"> Edit / Create Module </a></li>
+                    <li>Modules : {{#if isModule}}  
+                      {{#each getModules}} 
+                      {{#if teach}}
+                      {{code}}
+                      {{else}}
+                      {{codes}}
+                      {{/if}}
+                      {{/each}} 
+                      {{else}} Null 
+                      {{/if}} </li>
+                      {{#if teach}}
+                     <li class="divider"></li>
+                     <li><a id = "createModule">  Edit / Create Module </a></li> 
+                    {{/if}}
                 </ul>
             </li>
 
@@ -134,11 +155,18 @@
  
  <div class = "row" id ="dashrow">
 
-  {{#each list}}
 
-   {{>actbox}}
+{{#if isteacher}}
+ {{#each list}}
+ {{>actbox}}
+ {{/each}}
+{{else}} 
+{{#each stulist}}
+ {{>actbox}}
+ {{/each}}
+ {{/if}}
 
-  {{/each}}
+ 
 
 
 
@@ -398,6 +426,28 @@
       </div>
      <div class = "col-md-4" id="control">
       <h4> Activity Control </h4>
+      <div class = "row">
+       <button id="togglestatus">{{activitystatus}}</button>
+      </div>
+      <div class = "row"> 
+       <button  id="notibutton">Push Notification</button>
+      </div>
+      <div class = "row"> 
+       <button id="respbutton">Response Analysis</button>
+      </div>
+
+      <div class = "row">
+         <form id = "feedback">
+       <fieldset class="form-group">
+    
+       <textarea rows ="8" cols = "60em" id ="feedbackarea" name="feedback " > Give group feedback.. 
+       </textarea>
+  
+       </fieldset>
+       
+       <button type="submit"  id="submitfeed">Submit Feedback</button>
+      </form>
+      </div>
      </div>
      <div class = "col-md-4" id="response">
       <h4> Responses </h4>

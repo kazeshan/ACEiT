@@ -381,3 +381,58 @@ text-align: center;
   height: 180px;
   resize:none;
 }
+
+#respbutton{
+  width : 150px;
+  text-align: center;
+  background-color: black;
+  margin-top:5px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+}
+
+#notibutton{
+  width : 150px;
+  text-align: center;
+  background-color: black;
+  margin-top:5px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+}
+
+#togglestatus{
+  width : 150px;
+  text-align: center;
+  background-color: black;
+  margin-top:20px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+}
+
+#feedbackarea{
+  padding:0px;
+  width:210px;
+  height: 45px;
+  resize:none;
+  margin-top: 20px;
+
+}
+
+#submitfeed{
+  width : 150px;
+  text-align: center;
+  background-color: black;
+  margin-top:0px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+
+}
+
+#ulnoti{
+
+  padding:10px;
+}

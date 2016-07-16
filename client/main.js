@@ -14,6 +14,7 @@ Session.setDefaultPersistent('userName','');
 Session.setDefaultPersistent('userType','');
 Session.setDefaultPersistent('profileMade','No');
 Session.setDefault('qvselect','');
+Session.setDefaultPersistent('actstatus','inactive');
 
 
 //default session end
@@ -113,11 +114,19 @@ Template.dashboard.helpers({
 
    list : function(){
 
-   	if(Session.get('userType')=='teacher'){
-
-   		return activityList.find({});
-   	}
+   		return activityList.find({ userID : Session.get('userID')},{ sort: { time: -1 } });
+   	
    },
+   
+   stulist : function(){
+     
+       var smod = studentModules.findOne({studentID:Session.get('userID')}).codes;
+       return activityList.find({module: {$in: smod},status : 'active'},{ sort: { time: -1 } });
+    
+    
+
+    
+  },
 
    isteacher: function(){
     if(Session.get('userType')=='teacher'){
@@ -149,11 +158,33 @@ Template.navigation.helpers({
    },
 
    getModules : function () {
-    
+       
+        if(Session.get('userType')=='teacher'){
         return teacherModules.find({userID:Session.get('userID')});
+      }
+        else{
+          
+         return studentModules.find({studentID:Session.get('userID')});
+          
+                  }
    },
 
    isModule: function(){
+
+    if(Session.get('userType')=='student'){
+   
+    if(studentModules.find({studentID:Session.get('userID')}).fetch()==''){
+
+      return false;
+    }
+
+    else{
+      return true;
+    }
+  }
+
+
+   else{
    
     if(teacherModules.find({userID:Session.get('userID')}).fetch()==''){
 
@@ -163,8 +194,33 @@ Template.navigation.helpers({
     else{
       return true;
     }
+  }
 
    },
+
+   teach : function(){
+
+    if(Session.get('userType') == 'teacher'){
+
+      return true;
+    }
+
+    else{
+
+      return false;
+    }
+   },
+
+   unseen : function(){
+
+    return notifications.find({studentID:Session.get('userID'), status : 'unseen'}).fetch().length;
+   },
+
+
+   getNoti : function(){
+
+    return notifications.find({studentID:Session.get('userID')},{ sort: { time: -1 } });
+   }
 
 
 
@@ -179,6 +235,20 @@ Template.navigation.events({
    Router.go('/');
    logout();
 
+   },
+
+   'click #noti' : function(){
+
+    var p;
+    var ret = notifications.find({studentID:Session.get('userID'), status:'unseen'}).fetch();
+    var len = ret.length; 
+
+    if(len != 0){
+    for(p=0;p<len;p++){
+    var id = ret[p]._id;
+    notifications.update({_id:id},{ $set : {status : "seen"}},{multi : true} );
+   }
+}
    },
    
    'click #createModule' : function(){
@@ -355,14 +425,29 @@ Template.addmodule.events({
   
    var z;
    for (z=0; z< array.length;z++){
+   currentID = array[z]; 
+
+   if(studentModules.find({studentID:currentID}).fetch() == ''){
+   
+   var mods =[modcode];
    studentModules.insert({
-        studentID : array[z],
+        studentID : currentID,
         module : modname,
-        code : modcode,
+        codes : mods,
         time : new Date(),
 
    });
    }
+
+   else{
+    var currentmods = studentModules.findOne({studentID:currentID}).codes;
+    var id = studentModules.findOne({studentID:currentID})._id;
+    currentmods.push(modcode);
+    studentModules.update({_id:id }, { $set: {codes: currentmods }});
+
+
+   }
+ }
   
    alert("Module has been created!");
    Router.go('/dashboard');
@@ -463,6 +548,18 @@ Template.session.helpers({
   
    }
 
+   },
+
+   activitystatus : function(){
+
+    if(Session.get('actstatus') == "inactive"){
+      return 'Start Activity'
+    }
+
+    else{
+
+      return 'Finish Activity'
+    }
    }
 
 });
@@ -490,6 +587,52 @@ Template.session.events({
    old.push(q);
 
    questions.update({_id:id }, { $set: {quest: old }});
+  },
+
+  'click #togglestatus' : function(){
+
+    var id = activityList.findOne({aID:Session.get('aID')})._id;
+    var status = activityList.findOne({aID:Session.get('aID')}).status;
+    
+    if(status == 'active'){
+    activityList.update({_id:id }, { $set: {status: 'inactive' }});
+    Session.setPersistent('actstatus','inactive');
+    Router.go('/dashboard');
+    
+    
+   }
+    else{
+      activityList.update({_id:id }, { $set: {status: 'active' }});
+      Session.setPersistent('actstatus','active');
+      
+    }
+  },
+
+   'click #notibutton' : function(){
+
+   var noti = prompt("Type the message you want to send", "Have mercy");
+   var modu =  activityList.findOne({aID:Session.get('aID')}).module;
+   var slist =  teacherModules.findOne({code:modu}).studentID;
+   var y = slist.split('\n');
+
+   var z;
+   for (z=0; z< y.length;z++){
+   current = y[z];
+
+   notifications.insert({
+        studentID : current,
+        module : modu,
+        message : noti,
+        status : 'unseen',
+        time : new Date(),
+
+   });
+
+
+   } 
+
+   alert("Notifications sent");
+
   },
 
 
@@ -583,3 +726,6 @@ function logout(){
 
 
 //Independent functions end
+
+console.log("Developer : Siddhartha Arora");
+console.log("Linkedin : in.linkedin/in/sidirk");

@@ -8,3 +8,4 @@ questions = new Mongo.Collection('questions');
 deployedquestions = new Mongo.Collection('deployedquestions');
 responses = new Mongo.Collection('Responses');
 feedback = new Mongo.Collection('feedback');
+notifications = new Mongo.Collection('notifications');
