@@ -493,6 +493,22 @@ Template.actbox.events({
 });
 
 Template.session.helpers({
+
+  teach : function(){
+
+    if(Session.get('userType') == 'teacher'){
+
+      return true;
+    }
+
+    else{
+
+      return false;
+    }
+  }
+});
+
+Template.teachersession.helpers({
  
    qlist : function (){
      
@@ -553,19 +569,24 @@ Template.session.helpers({
    activitystatus : function(){
 
     if(Session.get('actstatus') == "inactive"){
-      return 'Start Activity'
+      return 'Start Activity';
     }
 
     else{
 
-      return 'Finish Activity'
+      return 'Finish Activity';
     }
+   },
+
+   rlist : function(){
+
+    return responses.find({aID : Session.get('aID')});
    }
 
 });
 
 
-Template.session.events({
+Template.teachersession.events({
 
   'click .qbtn' : function(event){
 
@@ -574,6 +595,40 @@ Template.session.events({
    var qid = target.id;
    qid = qid.slice(1);
    Session.set('qvselect',qid);
+  },
+  
+  'click .qbtn2' : function(event){
+
+   event.preventDefault();
+   const target = event.target;
+   var qid = target.id;
+   qid = qid.slice(1);
+   var currentq = questions.findOne({'aID':Session.get('aID')}).quest[qid];
+   activity = Session.get('aID')
+
+   if(deployedquestions.find({aID:activity}).fetch() == ''){
+   
+   var quests =[currentq];
+
+   deployedquestions.insert({
+        teacherID : Session.get('userID'),
+        aID : activity,
+        deployed : quests,
+        time : new Date(),
+
+   });
+   }
+
+   else{
+    var currentdeployed = deployedquestions.findOne({aID:activity}).deployed;
+    var id = deployedquestions.findOne({aID:activity})._id;
+    currentdeployed.push(currentq);
+    deployedquestions.update({_id:id }, { $set: {deployed: currentdeployed }});
+
+
+   }
+
+
   },
 
   'submit #addqform' : function(e){
@@ -638,6 +693,104 @@ Template.session.events({
 
 });
 
+Template.studentsession.helpers({
+
+  sqlist : function (){
+     
+      var a =  deployedquestions.findOne({'aID':Session.get('aID')}).deployed;    
+      Session.setPersistent('qnumber',a.length);
+      return a; 
+             
+   },
+
+   aid : function (){
+
+    return Session.get('aID');
+   },
+
+   getactqnum : function(){
+
+   return Session.get('qnumber');
+
+   },
+
+   getactmod : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).name;
+   },
+
+   getmodcode : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).module;
+   },
+
+   getactcode : function(){
+
+    return activityList.findOne({'aID':Session.get('aID')}).activity;
+   },
+  
+   getactnum : function (){
+
+    var x = activityList.findOne({'aID':Session.get('aID')}).module;
+    return teacherModules.findOne({'code':x}).studentID.split('\n').length;
+   },
+
+   qviewmain : function(){
+
+    if(Session.get('sqvselect') == ''){
+
+    return 'None Selected';
+    
+     }
+
+   else{
+
+    return deployedquestions.findOne({'aID':Session.get('aID')}).deployed[Session.get('sqvselect')];
+  
+   }
+
+   },
+
+   prlist : function(){
+
+    return responses.find({aID : Session.get('aID'), studentID: { $ne: Session.get('userID')}});
+   
+   }
+
+});
+
+Template.studentsession.events({
+
+   'click .sqbtn' : function(event){
+
+   event.preventDefault();
+   const target = event.target;
+   var qid = target.id;
+   qid = qid.slice(1);
+   Session.set('sqvselect',qid);
+  },
+
+  'submit #respform' : function(respe){
+  
+
+   respe.preventDefault();
+   const target = respe.target;
+   var resp = target.responseadd.value;
+   var id = Session.get('aID');
+   var stuid = Session.get('userID');
+
+   responses.insert({
+        studentID : stuid,
+        response : resp,
+        aID  : id,
+        time : new Date(),
+
+   });
+
+  
+  },
+
+});
 //loginIVLE
 
 function loginIVLE() {

@@ -267,6 +267,16 @@ text-align: center;
   color:white;
 }
 
+.sqbtn{
+   
+  
+  text-align: center;
+  
+  background-color: black;
+  border:1px solid white;
+  color:white;
+}
+
 
 
 #sessionthird{
@@ -433,6 +443,66 @@ text-align: center;
 }
 
 #ulnoti{
+    height: auto;
+    max-height: 100px;
+    overflow-x: hidden;
+    padding:0px;
+}
 
+#linoti{
+  border-bottom: 1px solid black;
+}
+
+#addrtextarea{
+  border:1px solid grey;
+  width:325px;
+  height: 150px;
+  overflow-x: hidden;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  text-align:left;
+  color:grey;
   padding:10px;
+
+}
+
+#saverespbtn{
+ width : 100px;
+  text-align: center;
+  background-color: black;
+  margin-top:0px;
+  margin-bottom: 10px;
+  border:1px solid white;
+  color:white;
+}
+
+#attachrespbtn{
+ width : 100px;
+  text-align: center;
+  background-color: black;
+  margin-top:0px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+}
+
+#submitrespbtn{
+ width : 100px;
+  text-align: center;
+  background-color: black;
+  margin-top:0px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+}
+
+#viewfeedbtn{
+  width : 150px;
+  text-align: center;
+  background-color: black;
+  margin-top:0px;
+  margin-bottom: 0px;
+  border:1px solid white;
+  color:white;
+
 }

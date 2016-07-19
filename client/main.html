@@ -88,12 +88,12 @@
             <li class ="dropdown">
               <a style="color:white" id = "noti" data-toggle="dropdown" class="dropdown-toggle">Notifications <sup style = "color:red"> {{unseen}} </sup></a>
               
-              <ul role="menu" class="dropdown-menu" style="color:black" id = "ulnoti">
+              <ol role="menu" class="dropdown-menu" style="color:black" id = "ulnoti">
               {{#each getNoti}}
-              <li> {{message}} </li>
+              <li id = "linoti"> {{message}} </li>
               {{/each}}
 
-              </ul>
+              </ol>
 
             </li>
           <li><a href="#" style="color:white" > {{currentTime}}</a></li>
@@ -328,13 +328,137 @@
 </template>
 
 <template name = "session">
-
     {{>navigation}}
+    
+    {{#if teach}}
+    {{>teachersession}}
+    {{else}}
+    {{>studentsession}}
+    {{/if}}
+</template>
+
+<template name = "studentsession">
+  
+
+<div class = "row" id = "sessionfirst">
+    <div class = "col-md-3">
+  {{aid}} Activity Session Page 
+  </div>
+  </div>
+  <div class = "row">
+
+    <div id = "sessionquest" class = "col-md-3">
+
+      <div class = "row" >
+      <h4> Questions </h4>
+      </div>
+
+      <div class = "row">
+
+      <div class = "list-group" id ="questlist">
+           {{#each sqlist}}
+          
+           <div class ="list-group-item questitem" >
+            <p id = "qdisplaynum"> {{@index}} </p>
+            <p id ="qdisplay"> {{this}}  </p> 
+            <p>
+
+             <button id = "v{{@index}}" class = "sqbtn"> View and Respond </button>  
+            
+            
+            </p>
+            </div>
+
+           {{/each}}
+          
+           
+
+      </div>
+      </div>
+    </div>
+
+    <div class = "col-md-7" id = "sessionsec">
+
+     <div class = "row" id="sessionadmin">
+
+      <div class = "col-md-6" id= "sessionthird">
+      <h4> Question View </h4>
+     
+     <div id ="qviewmain">
+
+      <p> {{qviewmain}}
+       </p> 
+     </div>
+    
+
+     </div>
+     
+      <div class = "col-md-6" id = "sessionfourth">
+      <h4> Write Response </h4>
+         <form id = "respform">
+       <fieldset class="form-group">
+    
+       <textarea rows ="8" cols = "60em" id ="addrtextarea" name="responseadd" > Type response here...
+       </textarea>
+  
+       </fieldset>
+       
+       <button id="saverespbtn">Save</button>
+       <button id="attachrespbtn">Attach File</button>
+       <button type="submit"  id="submitrespbtn" >Submit</button>
+      </form>
+
+      
+     </div>
+   </div>
+
+     <div class = "row" id ="sessionresponse">
+      <div class = "col-md-8" id="addquest">
+        <h4> Peer Responses </h4>
+
+        <div class = "list-group" id ="peerresplist">
+           {{#each prlist}}
+          
+           <div class ="list-group-item questitem" >
+            <p id = "rdisplaynum"> <b> {{studentID}} </b></p>
+            <p id ="rdisplay"> {{response}}  </p> 
+           
+            </div>
+
+           {{/each}}
+      </div>
+      
+     
+      </div>
+     <div class = "col-md-4" id="response">
+      <h4> Activity Admin </h4>
+      <div class = "list-group" id = "actadmin">
+
+        <p class = "list-group-item admin"> Module Name  : {{getactmod}} </p>
+        <p class = "list-group-item admin">  Activity Name : {{getmodcode}} - {{getactcode}} </p>
+
+        <p class = "list-group-item admin"> Enrolled Students - {{getactnum}} </p>
+
+        <p class = "list-group-item admin"> Start Time - </p>
+        <p class = "list-group-item admin"> No. of Questions - {{getactqnum}} </p>
+        <p class = "list-group-item admin"> Questions Responded- </p>
+      </div>
+      <button type="submit"  id="viewfeedbtn">View Feedback</button>
+     </div>
+     </div>
+   </div>
+  </div>
+
+  
+
+  </template>
 
 
 
 
 
+
+<template name = "teachersession">
   
   <div class = "row" id = "sessionfirst">
     <div class = "col-md-3">
@@ -451,6 +575,17 @@
      </div>
      <div class = "col-md-4" id="response">
       <h4> Responses </h4>
+      <div class = "list-group" id ="resplist">
+           {{#each rlist}}
+          
+           <div class ="list-group-item questitem" >
+            <p id = "rdisplaynum"> <b> {{studentID}} </b></p>
+            <p id ="rdisplay"> {{response}}  </p> 
+           
+            </div>
+
+           {{/each}}
+      </div>
      </div>
      </div>
    </div>
