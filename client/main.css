@@ -506,3 +506,19 @@ text-align: center;
   color:white;
 
 }
+
+#resplist{
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+    padding:0px;
+}
+
+#peerresplist{
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+    padding:0px;
+}
+
+

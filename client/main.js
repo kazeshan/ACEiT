@@ -10,6 +10,8 @@ import './main.html';
 //default session
 
 Session.setDefaultPersistent('userID','');
+Session.setDefaultPersistent('setID','No');
+Session.setDefaultPersistent('setuserName','No');
 Session.setDefaultPersistent('userName','');
 Session.setDefaultPersistent('userType','');
 Session.setDefaultPersistent('profileMade','No');
@@ -99,7 +101,7 @@ Template.dashboard.helpers({
     var user = Session.get('userID');
 
     if(user != ''){
-   	if(user == 't0914194'){
+   	if((user == 't0914194') || (user =='dcsbw') || (user ='A0117057')){
 
       Session.setPersistent('userType','teacher');
    		
@@ -797,8 +799,8 @@ function loginIVLE() {
   var APIKey = "6YIDjroMfeBjiTP49ms99";
   var APIDomain = "https://ivle.nus.edu.sg/";
   var APIUrl = APIDomain + "api/lapi.svc/";
-  var returnURL = 'localhost:3000/dashboard';
-  var LoginURL = APIDomain + "api/login/?apikey=6YIDjroMfeBjiTP49ms99&url=http%3A%2F%2F" + returnURL;
+  var returnURL = 'https://aceit.meteorapp.com/dashboard';
+  var LoginURL = APIDomain + "api/login/?apikey=6YIDjroMfeBjiTP49ms99&url=" + returnURL;
   Session.setPersistent('userState',"logged-in");
 
   window.location = LoginURL;
